@@ -32,7 +32,8 @@ function Welcome() {
               {token ? (
                 <>
                   <p className="welcome-text">
-                    Welcome back 👋, Seems you are already logged in. Click below to access the dashboard.
+                    Welcome back 👋, Seems you are already logged in. Click
+                    below to access the dashboard.
                   </p>
                   <Link to="/dashboard">
                     <button className="btn btn-success shadow">Continue</button>
@@ -55,7 +56,9 @@ function Welcome() {
             {/* Features Section */}
             <div className="row">
               <div className="col-sm-12 text-center py-5">
-                <h4 className="features-heading">Features of Expense Manager</h4>
+                <h4 className="features-heading">
+                  Features of Expense Manager
+                </h4>
               </div>
             </div>
 
@@ -65,7 +68,10 @@ function Welcome() {
                 <div className="card shadow feature-card">
                   <div className="card-body text-center">
                     <h5 className="card-title">Track Expenses</h5>
-                    <p className="card-text">Easily log daily expenses and keep track of your spending habits.</p>
+                    <p className="card-text">
+                      Easily log daily expenses and keep track of your spending
+                      habits.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -73,7 +79,10 @@ function Welcome() {
                 <div className="card shadow feature-card">
                   <div className="card-body text-center">
                     <h5 className="card-title">Visual Reports</h5>
-                    <p className="card-text">View insightful charts and graphs to analyze your financial trends.</p>
+                    <p className="card-text">
+                      View insightful charts and graphs to analyze your
+                      financial trends.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -81,7 +90,10 @@ function Welcome() {
                 <div className="card shadow feature-card">
                   <div className="card-body text-center">
                     <h5 className="card-title">Set Budgets</h5>
-                    <p className="card-text">Create and manage budgets to control your spending effectively.</p>
+                    <p className="card-text">
+                      Create and manage budgets to control your spending
+                      effectively.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -89,7 +101,10 @@ function Welcome() {
                 <div className="card shadow feature-card">
                   <div className="card-body text-center">
                     <h5 className="card-title">Secure Storage</h5>
-                    <p className="card-text">Your financial data is encrypted and securely stored for privacy.</p>
+                    <p className="card-text">
+                      Your financial data is encrypted and securely stored for
+                      privacy.
+                    </p>
                   </div>
                 </div>
               </div>

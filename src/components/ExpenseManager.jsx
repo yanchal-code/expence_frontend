@@ -133,17 +133,17 @@ const ExpenseManager = () => {
       </div>
 
       <div className="d-flex justify-content-between align-items-center">
-      <div className="row mb-3">
-  <div className="col-sm-12">
-    <input
-      type="text"
-      placeholder="Search..."
-      className="form-control"
-      value={searchText}
-      onChange={(e) => setSearchText(e.target.value)}
-    />
-  </div>
-</div>
+        <div className="row mb-3">
+          <div className="col-sm-12">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="form-control"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </div>
+        </div>
 
         <button className="btn btn-primary" onClick={openAddExpenseModal}>
           Add Expense
@@ -151,53 +151,62 @@ const ExpenseManager = () => {
       </div>
 
       <DataTable
-  columns={[
-    { name: "S.No.", selector: (row, index) => index + 1, sortable: true },
-    { name: "Category", selector: (row) => row.category, sortable: true },
-    { name: "Amount", selector: (row) => row.amount, sortable: true },
-    {
-      name: "Date",
-      selector: (row) => new Date(row.date).toLocaleDateString(),
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <>
-          <button className="btn btn-warning btn-sm me-2" onClick={() => editExpense(row)}>
-            Edit
-          </button>
-          <button className="btn btn-danger btn-sm" onClick={() => deleteExpense(row._id || row.id)}>
-            Delete
-          </button>
-        </>
-      ),
-    },
-  ]}
-  data={expenses.filter((expense) =>
-    expense.category.toLowerCase().includes(searchText.toLowerCase())
-  )}
-  pagination
-  highlightOnHover
-  customStyles={{
-    headRow: {
-      style: {
-        backgroundColor: "#007bff", // Blue background
-        color: "white", // White text
-        fontWeight: "bold",
-        fontSize: "16px", // Bigger text
-        height: "40px", // Increased height
-        paddingTop: "10px", // Adds space inside
-      },
-    },
-    table: {
-      style: {
-        marginTop: "20px", // Adds space above the table
-      },
-    },
-  }}
-/>
-
+        columns={[
+          {
+            name: "S.No.",
+            selector: (row, index) => index + 1,
+            sortable: true,
+          },
+          { name: "Category", selector: (row) => row.category, sortable: true },
+          { name: "Amount", selector: (row) => row.amount, sortable: true },
+          {
+            name: "Date",
+            selector: (row) => new Date(row.date).toLocaleDateString(),
+            sortable: true,
+          },
+          {
+            name: "Actions",
+            cell: (row) => (
+              <>
+                <button
+                  className="btn btn-warning btn-sm me-2"
+                  onClick={() => editExpense(row)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => deleteExpense(row._id || row.id)}
+                >
+                  Delete
+                </button>
+              </>
+            ),
+          },
+        ]}
+        data={expenses.filter((expense) =>
+          expense.category.toLowerCase().includes(searchText.toLowerCase())
+        )}
+        pagination
+        highlightOnHover
+        customStyles={{
+          headRow: {
+            style: {
+              backgroundColor: "#007bff", // Blue background
+              color: "white", // White text
+              fontWeight: "bold",
+              fontSize: "16px", // Bigger text
+              height: "40px", // Increased height
+              paddingTop: "10px", // Adds space inside
+            },
+          },
+          table: {
+            style: {
+              marginTop: "20px", // Adds space above the table
+            },
+          },
+        }}
+      />
 
       {/* Right-side Modal */}
       {showModal && (
@@ -206,7 +215,10 @@ const ExpenseManager = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5>{isEditing ? "Edit Expense" : "Add Expense"}</h5>
-                <button className="btn-close" onClick={() => setShowModal(false)}></button>
+                <button
+                  className="btn-close"
+                  onClick={() => setShowModal(false)}
+                ></button>
               </div>
               <div className="modal-body">
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -221,19 +233,33 @@ const ExpenseManager = () => {
                       <option value="College Fees">College Fees</option>
                       <option value="Groceries">Groceries</option>
                     </select>
-                    <small className="text-danger">{errors.category?.message}</small>
+                    <small className="text-danger">
+                      {errors.category?.message}
+                    </small>
                   </div>
 
                   <div className="mb-3">
                     <label>Amount</label>
-                    <input type="number" className="form-control" {...register("amount")} />
-                    <small className="text-danger">{errors.amount?.message}</small>
+                    <input
+                      type="number"
+                      className="form-control"
+                      {...register("amount")}
+                    />
+                    <small className="text-danger">
+                      {errors.amount?.message}
+                    </small>
                   </div>
 
                   <div className="mb-3">
                     <label>Date</label>
-                    <input type="date" className="form-control" {...register("date")} />
-                    <small className="text-danger">{errors.date?.message}</small>
+                    <input
+                      type="date"
+                      className="form-control"
+                      {...register("date")}
+                    />
+                    <small className="text-danger">
+                      {errors.date?.message}
+                    </small>
                   </div>
 
                   <button type="submit" className="btn btn-primary">

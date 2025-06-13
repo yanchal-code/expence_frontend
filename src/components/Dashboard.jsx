@@ -2,19 +2,51 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Swal from "sweetalert2";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
-
-
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  Cell,
+} from "recharts";
 
 function Dashboard() {
   const [welcomeName, setWelcomeName] = useState("");
+  const [graphData, setGraphData] = useState([]);
+  const [summary, setSummary] = useState({});
   const navigate = useNavigate();
+
+  const fetchDashboardData = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("token"));
+      const response = await fetch(
+        "http://localhost:3300/getDashboardOveriew",
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const res = await response.json();
+
+      if (res.success && res.data) {
+        setGraphData(res.data.graph_data);
+        setSummary(res.data.others);
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
 
   useEffect(() => {
     const storedName = localStorage.getItem("welcomeName");
     if (storedName) {
       setWelcomeName(storedName);
     }
+    fetchDashboardData();
   }, []);
 
   const handleLogout = () => {
@@ -35,16 +67,6 @@ function Dashboard() {
     });
   };
 
-  const data = [
-    { category: 'Entertainment', expense: 1000, color: "#8884d8" },
-    { category: 'Food', expense: 3000, color: "#82ca9d" },
-    { category: 'Travel', expense: 400, color: "#ff7300" },
-    { category: 'Education', expense: 3999, color: "#ffc658" },
-    { category: 'Groceries', expense: 5000, color: "#d45087" },
-  ]
-
-
-
   return (
     <div>
       {/* Header Section */}
@@ -53,7 +75,7 @@ function Dashboard() {
         <div className="row">
           {/* Welcome Section */}
           <div className="col-sm-12">
-            <h5>Welcome, {welcomeName || 'Guest'} 👋</h5>
+            <h5>Welcome, {welcomeName || "Guest"} 👋</h5>
           </div>
           <div className="col-sm-12">
             <hr />
@@ -80,13 +102,13 @@ function Dashboard() {
                   alt="Expense Chart"
                 /> */}
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={data}>
+                  <BarChart data={graphData}>
                     <XAxis dataKey="category" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
                     <Bar dataKey="expense">
-                      {data.map((entry, index) => (
+                      {graphData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Bar>
@@ -115,27 +137,34 @@ function Dashboard() {
                   <tbody>
                     <tr>
                       <td>Total Spent</td>
-                      <td>10,000 Rs.</td>
+                      <td>{summary.all_time_spent_overall || 0} Rs.</td>
                     </tr>
                     <tr>
                       <td>Most Spent on</td>
-                      <td>Food</td>
+                      <td>{summary.most_spent_category || "N/A"}</td>
                     </tr>
                     <tr>
                       <td>Least Spent on</td>
-                      <td>Electricity</td>
+                      <td>{summary.least_spent_category || "N/A"}</td>
                     </tr>
                     <tr>
                       <td>Spent on Entertainment</td>
-                      <td>2,000 Rs.</td>
+                      <td>{summary.spent_on_entertainment || 0} Rs.</td>
                     </tr>
                   </tbody>
                 </table>
                 <table className="table table-bordered table-striped">
                   <tbody>
                     <tr>
-                      <td>Total Spent (January 2024)</td>
-                      <td>10,000 Rs.</td>
+                      <td>
+                        Total Spent (
+                        {new Date().toLocaleString("default", {
+                          month: "long",
+                          year: "numeric",
+                        })}
+                        )
+                      </td>
+                      <td>{summary.current_month_expense || 0} Rs.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -149,13 +178,10 @@ function Dashboard() {
                   className="btn btn-primary"
                   onClick={() => navigate("/manage-expenses")}
                 >
-                   View Details / Add Expense
+                  View Details / Add Expense
                 </button>
                 &nbsp;<span style={{ color: "#cdb6b6" }}>|</span>&nbsp;
-                <button
-                  className="btn btn-danger"
-                  onClick={handleLogout}
-                >
+                <button className="btn btn-danger" onClick={handleLogout}>
                   <i className="bi bi-power"></i> Logout
                 </button>
               </div>
