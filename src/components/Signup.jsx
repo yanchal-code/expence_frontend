@@ -42,11 +42,14 @@ function Signup() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("http://localhost:3300/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://expence-backend-1-nbtx.onrender.com/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
 

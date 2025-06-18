@@ -40,10 +40,13 @@ const ExpenseManager = () => {
   const fetchExpenses = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("token"));
-      const response = await fetch("http://localhost:3300/getData", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        "https://expence-backend-1-nbtx.onrender.com/getData",
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const res = await response.json();
       setExpenses(res.data);
     } catch (error) {
@@ -67,8 +70,8 @@ const ExpenseManager = () => {
     try {
       const token = JSON.parse(localStorage.getItem("token"));
       const url = isEditing
-        ? `http://localhost:3300/putData/${editId}`
-        : "http://localhost:3300/addData";
+        ? `https://expence-backend-1-nbtx.onrender.com/putData/${editId}`
+        : "https://expence-backend-1-nbtx.onrender.com/addData";
       const method = isEditing ? "PUT" : "POST";
 
       const response = await fetch(url, {
@@ -102,10 +105,13 @@ const ExpenseManager = () => {
       if (result.isConfirmed) {
         try {
           const token = JSON.parse(localStorage.getItem("token"));
-          await fetch(`http://localhost:3300/delData/${id}`, {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          await fetch(
+            `https://expence-backend-1-nbtx.onrender.com/delData/${id}`,
+            {
+              method: "DELETE",
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           setReload(!reload);
         } catch (error) {
           console.error("Error deleting expense:", error);

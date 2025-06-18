@@ -23,7 +23,7 @@ function Dashboard() {
     try {
       const token = JSON.parse(localStorage.getItem("token"));
       const response = await fetch(
-        "http://localhost:3300/getDashboardOveriew",
+        "https://expence-backend-1-nbtx.onrender.com/getDashboardOveriew",
         {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
