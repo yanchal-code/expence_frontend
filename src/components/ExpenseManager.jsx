@@ -8,6 +8,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 
+// Validation Schema
 const schema = yup.object().shape({
   category: yup.string().required("Category is required"),
   amount: yup
@@ -26,6 +27,7 @@ const ExpenseManager = () => {
   const [reload, setReload] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -37,7 +39,9 @@ const ExpenseManager = () => {
     resolver: yupResolver(schema),
   });
 
+  // Fetch Expenses
   const fetchExpenses = async () => {
+    setLoading(true);
     try {
       const token = JSON.parse(localStorage.getItem("token"));
       const response = await fetch(
@@ -51,6 +55,8 @@ const ExpenseManager = () => {
       setExpenses(res.data);
     } catch (error) {
       console.error("Error fetching expenses:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,11 +68,13 @@ const ExpenseManager = () => {
   const openAddExpenseModal = () => {
     setIsEditing(false);
     setEditId(null);
-    reset(); // Clear the form when adding a new expense
+    reset();
     setShowModal(true);
   };
 
+  // Save or Update Expense
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const token = JSON.parse(localStorage.getItem("token"));
       const url = isEditing
@@ -91,9 +99,12 @@ const ExpenseManager = () => {
       }
     } catch (error) {
       console.error("Error saving expense:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Delete Expense
   const deleteExpense = async (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -103,6 +114,7 @@ const ExpenseManager = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         try {
           const token = JSON.parse(localStorage.getItem("token"));
           await fetch(
@@ -115,11 +127,14 @@ const ExpenseManager = () => {
           setReload(!reload);
         } catch (error) {
           console.error("Error deleting expense:", error);
+        } finally {
+          setLoading(false);
         }
       }
     });
   };
 
+  // Edit Expense
   const editExpense = (expense) => {
     setIsEditing(true);
     setEditId(expense._id || expense.id);
@@ -131,6 +146,13 @@ const ExpenseManager = () => {
 
   return (
     <div className="container mt-4">
+      {/* 🔄 Loader */}
+      {loading && (
+        <div className="overlay-loader">
+          <div className="loader-custom"></div>
+        </div>
+      )}
+
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Link to="/" className="btn btn-secondary">
           <IoIosArrowBack /> Back
@@ -150,7 +172,6 @@ const ExpenseManager = () => {
             />
           </div>
         </div>
-
         <button className="btn btn-primary" onClick={openAddExpenseModal}>
           Add Expense
         </button>
@@ -198,23 +219,23 @@ const ExpenseManager = () => {
         customStyles={{
           headRow: {
             style: {
-              backgroundColor: "#007bff", // Blue background
-              color: "white", // White text
+              backgroundColor: "#007bff",
+              color: "white",
               fontWeight: "bold",
-              fontSize: "16px", // Bigger text
-              height: "40px", // Increased height
-              paddingTop: "10px", // Adds space inside
+              fontSize: "16px",
+              height: "40px",
+              paddingTop: "10px",
             },
           },
           table: {
             style: {
-              marginTop: "20px", // Adds space above the table
+              marginTop: "20px",
             },
           },
         }}
       />
 
-      {/* Right-side Modal */}
+      {/* Modal */}
       {showModal && (
         <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog modal-dialog-end">

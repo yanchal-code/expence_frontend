@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,6 +20,7 @@ const schema = yup.object().shape({
 
 function Login() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,6 +36,7 @@ function Login() {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const response = await fetch(
         "https://expence-backend-1-nbtx.onrender.com/login",
@@ -58,11 +60,20 @@ function Login() {
       }
     } catch (error) {
       Swal.fire("Error", "Something went wrong! " + error.message, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
+      {/* Custom Full-screen Loader */}
+      {loading && (
+        <div className="overlay-loader">
+          <div className="loader-custom"></div>
+        </div>
+      )}
+
       <div className="login-container" style={{ marginTop: "-2px" }}>
         <div className="login-box">
           <div className="login-left">
@@ -90,6 +101,7 @@ function Login() {
                 </div>
                 <p className="text-danger">{errors.email?.message}</p>
               </div>
+
               <div className="form-group">
                 <div className="input-group">
                   <span className="input-group-text">
@@ -104,16 +116,34 @@ function Login() {
                 </div>
                 <p className="text-danger">{errors.password?.message}</p>
               </div>
+
               <div className="form-options">
                 <label>
                   <input type="checkbox" /> Remember
                 </label>
                 <Link to="/forgot-password">Forgot Password?</Link>
               </div>
-              <button type="submit" className="btn btn-primary w-100">
-                Login
+
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
+
             <p>
               Don't have an account? <Link to="/signup">Signup</Link>
             </p>
